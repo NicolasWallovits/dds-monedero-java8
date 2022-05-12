@@ -28,7 +28,7 @@ public class Cuenta {
     verificarCuanto(cuanto);
     verificarLimiteDeposito();
 
-    new Movimiento(LocalDate.now(), cuanto, true).agregateA(this);
+    agregarMovimiento(new Movimiento(LocalDate.now(), cuanto, true));
   }
 
   public void sacar(double cuanto) {
@@ -37,7 +37,7 @@ public class Cuenta {
     verificarSaldoSuficiente(cuanto);
     verificarLimiteExtraccion(cuanto);
 
-    new Movimiento(LocalDate.now(), cuanto, false).agregateA(this);
+    agregarMovimiento(new Movimiento(LocalDate.now(), cuanto, false));
   }
 
   private void verificarCuanto(double cuanto) {
@@ -69,6 +69,12 @@ public class Cuenta {
 
   public void agregarMovimiento(Movimiento movimiento) {
 
+    if (movimiento.isDeposito()) {
+      saldo += movimiento.getMonto();
+    } else {
+      saldo -= movimiento.getMonto();
+    }
+
     movimientos.add(movimiento);
   }
 
@@ -85,10 +91,6 @@ public class Cuenta {
 
   public double getSaldo() {
     return saldo;
-  }
-
-  public void setSaldo(double saldo) {
-    this.saldo = saldo;
   }
 
 }
