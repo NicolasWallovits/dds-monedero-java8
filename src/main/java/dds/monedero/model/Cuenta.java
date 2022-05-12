@@ -8,19 +8,17 @@ import java.util.List;
 
 public class Cuenta {
 
-  private double saldo = 0;
-  private List<Movimiento> movimientos = new ArrayList<>();
+  private double saldo;
+  private List<Movimiento> movimientos;
 
   public Cuenta() {
     saldo = 0;
+    movimientos = new ArrayList<>();
   }
 
   public Cuenta(double montoInicial) {
     saldo = montoInicial;
-  }
-
-  public void setMovimientos(List<Movimiento> movimientos) {
-    this.movimientos = movimientos;
+    movimientos = new ArrayList<>();
   }
 
   public void poner(double cuanto) {
@@ -65,12 +63,12 @@ public class Cuenta {
     }
   }
 
-  public void agregarMovimiento(Movimiento movimiento) {
+  private void agregarMovimiento(Movimiento movimiento) {
     saldo += movimiento.getMonto();
     movimientos.add(movimiento);
   }
 
-  public double getMontoExtraidoA(LocalDate fecha) {
+  private double getMontoExtraidoA(LocalDate fecha) {
     return getMovimientos().stream()
         .filter(movimiento -> movimiento.getMonto() < 0 && movimiento.getFecha().equals(fecha))
         .mapToDouble(Movimiento::getMonto)
