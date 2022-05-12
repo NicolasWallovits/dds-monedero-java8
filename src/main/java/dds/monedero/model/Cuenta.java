@@ -24,13 +24,9 @@ public class Cuenta {
   }
 
   public void poner(double cuanto) {
-    if (cuanto <= 0) {
-      throw new CuentaException(cuanto + ": el monto a ingresar debe ser un valor positivo");
-    }
 
-    if (getMovimientos().stream().filter(movimiento -> movimiento.isDeposito()).count() >= 3) {
-      throw new CuentaException("Ya excedio los " + 3 + " depositos diarios");
-    }
+    verificarCuanto(cuanto);
+    verificarLimiteDeposito();
 
     new Movimiento(LocalDate.now(), cuanto, true).agregateA(this);
   }
@@ -62,6 +58,12 @@ public class Cuenta {
     if (cuanto > limite) {
       throw new CuentaException("No puede extraer mas de $ " + 1000
           + " diarios, límite: " + limite);
+    }
+  }
+
+  private void verificarLimiteDeposito() {
+    if (getMovimientos().stream().filter(movimiento -> movimiento.isDeposito()).count() >= 3) {
+      throw new CuentaException("Ya excedio los " + 3 + " depositos diarios");
     }
   }
 
